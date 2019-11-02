@@ -69,35 +69,37 @@ def solve(bo):
     return None
 
 
-def valid(bo, num, pos):
+def valid(board, num, pos):
 
     if num != 0:
-        for colind, col in enumerate(bo[pos[0]]):
-            if col == num and colind != pos[1]:
+        for colind, element in enumerate(board[pos[0]]):
+            if element == num and colind != pos[1]:
                 return False
-        for rowind, row in enumerate(bo):
+        for rowind, row in enumerate(board):
             if row[pos[1]] == num and rowind != pos[0]:
                 return False
-        for row in range(pos[0]//3*3, pos[0]//3*3+3):
-            for col in range(pos[1]//3*3, pos[1]//3*3+3):
-                if [row, col] != pos:
-                    if bo[row][col] == num:
-                        return False
+
+        box_row_ind = pos[0]//3
+        box_col_ind = pos[1]//3
+        for row in range(box_row_ind*3, box_row_ind*3+3):
+            for col in range(box_col_ind*3, box_col_ind*3+3):
+                if board[row][col] == num and [row, col] != pos:
+                    return False
     return True
 
 
-def print_board(bo):
-    for rowind, row in enumerate(bo):
-        for colind, column in enumerate(row):
-            print(column, end="")
+def print_board(board):
+    for rowind, row in enumerate(board):
+        for colind, element in enumerate(row):
+            print(element, end="")
             if (colind+1) % 3 == 0:
                 print(" ∣ ", end="")
-        print("")
+        print()
         if (rowind+1) % 3 == 0:
-            print("-"*(len(bo[0])+3*3))
+            print("-"*(len(board[0])+9))
 
 # DID
 
 
 solve(board)
-print(board)
+print_board(board)
