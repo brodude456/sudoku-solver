@@ -1,17 +1,17 @@
 from copy import deepcopy
 from helper import make_board
 
-string_board = '''785 ∣ 439 ∣ 126 ∣ 
-    612 ∣ 875 ∣ 349 ∣ 
-    493 ∣ 621 ∣ 578 ∣ 
+string_board = '''785 ∣ 439 ∣ 126 ∣
+    612 ∣ 875 ∣ 349 ∣
+    493 ∣ 621 ∣ 578 ∣
     ------------------
-    357 ∣ 948 ∣ 261 ∣ 
-    861 ∣ 752 ∣ 934 ∣ 
-    904 ∣ 060 ∣ 005 ∣ 
+    357 ∣ 948 ∣ 261 ∣
+    861 ∣ 752 ∣ 934 ∣
+    904 ∣ 060 ∣ 005 ∣
     ------------------
-    070 ∣ 300 ∣ 012 ∣ 
-    120 ∣ 007 ∣ 400 ∣ 
-    049 ∣ 206 ∣ 007 ∣ 
+    070 ∣ 300 ∣ 012 ∣
+    120 ∣ 007 ∣ 400 ∣
+    049 ∣ 206 ∣ 007 ∣
     ------------------
        '''
 
@@ -29,35 +29,25 @@ def make_dict(board):
     return dict
 
 
-def find_first_empty(board):
+def find_next_empty(board):
     for rowind, row in enumerate(board):
         for colind, element in enumerate(row):
             if element == 0:
-                return [rowind, colind]
-    return False
+                yield [rowind, colind]
 
 # DID
 
 
 dict = make_dict(board)
 
-board_copy = deepcopy(board)
-
-emptyplaceslist = []
-while True:
-    # TODO use generators to find next empty space
-    first_empty_space = find_first_empty(board_copy)
-    if not first_empty_space:
-        break
-    emptyplaceslist.append(first_empty_space)
-    board_copy[first_empty_space[0]][first_empty_space[1]] = 1
+emptyplaceslist = list(find_next_empty(board))
 
 
 def solve(bo):
     while True:
         print_board(bo)
         print("       ")
-        pos = find_first_empty(bo)
+        pos = emptyplaceslist[0]
         if not pos:
             break
         bruh = 0
