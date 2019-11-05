@@ -1,72 +1,67 @@
 from copy import deepcopy
 from helper import make_board
 
-string_board = '''785 ∣ 439 ∣ 126 ∣
-    612 ∣ 875 ∣ 349 ∣
-    493 ∣ 621 ∣ 578 ∣
-    ------------------
-    357 ∣ 948 ∣ 261 ∣
-    861 ∣ 752 ∣ 934 ∣
-    904 ∣ 060 ∣ 005 ∣
-    ------------------
-    070 ∣ 300 ∣ 012 ∣
-    120 ∣ 007 ∣ 400 ∣
-    049 ∣ 206 ∣ 007 ∣
-    ------------------
-       '''
+string_board = '''000 ∣ 065 ∣ 002 ∣ 
+        501 ∣ 000 ∣ 830 ∣ 
+        002 ∣ 080 ∣ 560 ∣ 
+        ------------------
+        003 ∣ 750 ∣ 090 ∣ 
+        000 ∣ 040 ∣ 000 ∣ 
+        070 ∣ 032 ∣ 100 ∣ 
+        ------------------
+        015 ∣ 020 ∣ 600 ∣ 
+        028 ∣ 000 ∣ 401 ∣ 
+        400 ∣ 510 ∣ 000 ∣ 
+        ------------------'''
 
 board = make_board(string_board)
 
 
-def make_dict(board):
+def make_dict(emptyplaceslist):
+    used_numbers = {}
 
-    dict = {}
+    for item in emptyplaceslist:
+        used_numbers[item] = []
 
-    for row in range(len(board)):
-        for column in range(len(board[0])):
-            dict[(row, column)] = []
-
-    return dict
+    return used_numbers
 
 
 def find_next_empty(board):
     for rowind, row in enumerate(board):
         for colind, element in enumerate(row):
             if element == 0:
-                yield [rowind, colind]
+                yield (rowind, colind)
 
 # DID
 
-
-dict = make_dict(board)
-
 emptyplaceslist = list(find_next_empty(board))
 
+used_numbers = make_dict(emptyplaceslist)
 
-def solve(bo):
-    while True:
-        print_board(bo)
-        print("       ")
-        pos = emptyplaceslist[0]
-        if not pos:
-            break
+
+
+
+def solve(board,emptyplaceslist):
+    i=0
+    while i<len(emptyplaceslist):
+        pos = emptyplaceslist[i]
         bruh = 0
         for num in range(1, 10):
-            if valid(bo, num, pos) and num not in dict[tuple(pos)]:
-                bo[pos[0]][pos[1]] = num
+            if  num not in used_numbers[pos] and valid(board, num, pos):
+               
+                board[pos[0]][pos[1]] = num
                 bruh = 1
-
+                i+=1
+                used_numbers[pos].append(num)
+                break
         if bruh == 0:
-            dict[tuple(pos)] = []
+            i-=1
+            used_numbers[pos]=[]
+            board[pos[0]][pos[1]] = 0
+        
+        if i<0: return False
 
-            previus_not_filled_place = (emptyplaceslist[emptyplaceslist.index(
-                pos)-1][0], emptyplaceslist[emptyplaceslist.index(pos)-1][1])
-
-            dict[previus_not_filled_place].append(bo[emptyplaceslist[emptyplaceslist.index(
-                pos)-1][0]][emptyplaceslist[emptyplaceslist.index(pos)-1][1]])
-            bo[previus_not_filled_place[0]][previus_not_filled_place[1]] = 0
-
-    return None
+    return True
 
 
 def valid(board, num, pos):
@@ -100,6 +95,6 @@ def print_board(board):
 
 # DID
 
-
-solve(board)
+solve(board,emptyplaceslist)
 print_board(board)
+
